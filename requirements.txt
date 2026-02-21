@@ -1,0 +1,29 @@
+# ==========================================
+# LoGrid-HTPMS Project Requirements
+# Environment: tpms
+# ==========================================
+
+# Core Data Science & Utilities
+numpy==2.3.3
+scipy==1.16.3
+pandas==2.3.3
+matplotlib==3.10.7
+scikit-learn==1.7.2
+tqdm==4.67.1
+PyYAML==6.0.3
+joblib==1.5.2
+
+# Deep Learning (CNN & GNN)
+# Note: You may need to install PyTorch with the appropriate CUDA version for your system.
+# Example: pip install torch==2.9.1 torchvision --index-url https://download.pytorch.org/whl/cu130
+torch==2.9.1
+torch-geometric==2.7.0
+tensorboard==2.20.0
+
+# 3D Processing & Visualization
+pyvista==0.46.4
+numpy-stl==3.2.0
+
+# Simulation Automation (FEA & CFD)
+MPh==1.3.1
+abqpy==2025.9

@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data & Datasets (Excluded due to size limits)
+# GitHub has a 100MB limit per file. Large .npy, .npz, .csv, and simulation files should be hosted externally.
+**/dataset/*.npy
+**/dataset/*.npz
+**/dataset/*.csv
+**/dataset/*.mat
+**/dataset/*.h5
+**/dataset_params_*.npy
+
+# Simulation temporary & result files
+# Abaqus
+*.rec
+*.log
+*.msg
+*.dat
+*.prt
+*.com
+*.sim
+*.res
+*.sel
+*.stt
+*.mdl
+*.pac
+*.abq
+*.aba
+*.inp
+*.odb
+*.cae
+*.jnl
+*.lck
+
+# COMSOL
+*.mph.lock
+*.mphbak
+**/dataset_generate_CFD/*.mph
+
+# Blender
+*.blend1
+*.blend2
+
+# User local memory
+/memories/

@@ -1,0 +1,109 @@
+# CNN 模型配置 (清理版)
+# 移除了冗余的 decoder_type 配置
+
+data:
+  dataset_dir: "dataset"
+  voxel_size: 120
+  train_ratio: 0.8
+  num_workers: 0
+  augment_rotate_z: true  # Z轴旋转数据增强
+  
+  # 多尺度输入数据增强
+  augment_multiscale: true  # 是否启用多尺度输入增强
+  multiscale_range: [90, 120]  # 下采样的分辨率范围 [min_size, max_size]
+  multiscale_prob: 0.5  # 应用多尺度增强的概率 (0.0-1.0)
+  
+  # 预测目标: 
+  # 选项 1: ['E', 'yield'] (预测标量属性)
+  # 选项 2: ['curves'] (预测应力应变曲线, 41个点)
+  # 选项 3: ['E', 'yield', 'curves'] (多任务预测, 43个点, 推荐)
+  prediction_targets: ['curves']
+  
+  # 仅使用曲线的前N个点 (防止过拟合到塑性段)
+  curve_points: 15
+
+cnn:
+  # Architecture type: 'simple' (original) or 'resnet' (with residual connections)
+  architecture_type: 'resnet'
+  
+  # 卷积层通道数
+  filters: [8, 16, 32]
+  
+  # 全连接层维度
+  fc_dim: 256
+  
+  # Adaptive Pooling 输出尺寸
+  adaptive_pool_size: 6
+  
+  # Dropout
+  dropout: 0.3
+  
+  # 激活函数: 'relu' 或 'elu'
+  activation: 'elu'
+  
+  # Residual block configuration (for 'resnet' architecture_type)
+  residual:
+    use_bottleneck: false  # Use bottleneck design (1x1→3x3→1x1) for parameter reduction
+  
+  # Attention mechanism configuration
+  attention:
+    enabled: true  # Enable spatial/channel attention
+    type: 'cbam'  # 'channel', 'spatial', or 'cbam'
+    positions: [2]  # Apply attention after these layer indices
+    reduction: 16  # Reduction ratio for channel attention
+  
+  # Multi-scale feature fusion configuration
+  multi_scale_fusion:
+    enabled: false  # Enable multi-scale feature fusion
+    fusion_layers: [0, 1, 2]  # Which layer indices to fuse
+  
+  # Decoder configuration (统一使用这个配置)
+  decoder:
+    type: 'lstm'  # 'mlp', 'lstm', or 'transformer'
+    hidden_dim: 512  # Hidden dimension for LSTM/Transformer decoder
+    num_layers: 3  # Number of layers for LSTM/Transformer decoder
+    num_heads: 4  # Number of attention heads (transformer only)
+    dropout: 0.1  # Dropout for decoder
+
+training:
+  # CNN 训练参数
+  batch_size: 24
+  lr: 0.0002
+  epochs: 500
+  
+  # 优化器和损失
+  optimizer: "AdamW"
+  loss: "MAE"
+  weight_decay: 0.01
+
+  warmup:
+    epochs: 10  # 预热轮数
+    start_lr: 1.0e-6  # 预热起始学习率
+    scheduler: 'cosine'  
+  # 曲线任务复合损失 (仅 num_outputs > 1 时生效)
+  # curve_loss:
+  #   base: "MAE"  # MAE/MSE/SmoothL1
+  #   base_weight: 1.0
+  #   slope_weight: 0.2
+  #   curvature_weight: 0.05
+  #   smooth_l1_beta: 1.0
+  
+  # Physics-informed loss configuration (for stress-strain curve prediction)
+  physics_loss:
+    enabled: true  # Enable physics-informed loss components
+    monotonicity_weight: 0.1  # Penalize non-increasing stress in elastic region
+    smoothness_weight: 0.05  # Penalize large second derivatives (sharp changes)
+    elastic_weight: 0.1  # Enforce linear behavior in elastic region
+    elastic_points: 10  # Number of initial points considered as elastic region
+  
+  # 训练加速
+  use_amp: true
+  
+  # 早停
+  early_stopping_patience: 300
+
+logging:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints"
+  log_interval: 10
+  save_interval: 50

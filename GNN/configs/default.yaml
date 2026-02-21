@@ -1,0 +1,60 @@
+# Pore-GNN 默认配置
+
+data:
+  dataset_dir: "dataset"
+  voxel_size: 120
+  train_ratio: 0.8
+  num_workers: 4
+  
+  # 图构建参数
+  knn_k: 5
+
+cnn:
+  # 卷积层通道数
+  filters: [8, 16, 32]
+  # 全连接层维度
+  fc_dim: 128
+  # Adaptive Pooling 输出尺寸
+  adaptive_pool_size: 6
+  # Dropout (论文中未使用)
+  dropout: 0.0
+
+gnn:
+  # 模式: "graph_level" 或 "node_level"
+  type: "graph_level"
+  # 图卷积类型: "ChebConv", "GCNConv", "SAGEConv"
+  conv_type: "ChebConv"
+  # 隐藏层维度
+  hidden_dim: 128
+  # GNN层数
+  num_layers: 3
+  # 图池化方式: "sum", "mean", "max"
+  pooling: "sum"
+  # Chebyshev多项式阶数
+  cheb_k: 2
+
+training:
+  # CNN 预训练
+  cnn_batch_size: 16
+  cnn_lr: 0.0007
+  cnn_epochs: 300
+  
+  # GNN 训练
+  gnn_batch_size: 16
+  gnn_lr: 0.0007
+  gnn_epochs: 1000
+  
+  # 通用
+  optimizer: "AdamW"
+  loss: "MAE"
+  weight_decay: 0.0
+  
+  
+  # 早停
+  early_stopping_patience: 500
+
+logging:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints"
+  log_interval: 10
+  save_interval: 50
