@@ -41,18 +41,20 @@ LoGrid-HTPMS/
     └── scripts/                # 图构建、训练、评估脚本
 ```
 
-## � 数据集 (Datasets)
+## 数据集 (Datasets)
 
-由于数据集文件（`.npy`, `.npz`, `.mph` 等）体积较大，超出了 GitHub 的存储限制，本项目仓库中**不直接包含**完整的数据。
+本项目的数据集托管在 Hugging Face：
+🔗 [https://huggingface.co/datasets/pxy1118/LoGrid-HTPMS-Dataset](https://huggingface.co/datasets/pxy1118/LoGrid-HTPMS-Dataset)
 
-- **预处理后的数据**: 请通过 [在此处添加您的网盘链接，例如：Zenodo/百度网盘/Google Drive] 下载。
-- **原始仿真数据**: 如果您需要原始的 Abaqus/COMSOL 结果文件，请联系作者。
-- **放置路径**: 下载解压后，请将相应的文件放置在 `CNN/dataset/` 和 `GNN/dataset/` 目录下。
+请将下载的文件放置在以下相应目录中：
+- `CNN/dataset/`
+- `GNN/dataset/`
+- `dataset_generate_CFD/` (需放置 `fluid.mph`)
 
-## �🛠️ 环境依赖
+## 环境依赖
 
 ### 1. Python 环境
-推荐使用 Python 3.8+。可以通过以下命令安装项目所需的所有依赖：
+推荐使用 Python 3.11+。可以通过以下命令安装项目所需的所有依赖：
 
 ```bash
 # 安装所有依赖
