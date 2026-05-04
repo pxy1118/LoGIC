@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-重构版 TPMS 混合生成器 —— 支持 N 个 TPMS 通过 3x3x3xN 权重网格混合 + 3x3x3 密度控制网格
-✨ 新增：同时生成结构域和流体域 STL
+
 """
 
 import numpy as np

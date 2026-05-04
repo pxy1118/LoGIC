@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-LoGrid-HTPMS (Low-resolution Grid-controlled Heterogeneous TPMS) Generator V2
-✨ 新增：同时生成结构域和流体域 STL
+LoGIC Generator
+
 """
 
 import numpy as np
@@ -306,47 +306,47 @@ MANUAL_WEIGHT_GRID = np.array([
 # ], dtype=np.float32)
 
 _MANUAL_WEIGHT_GRID_MAP = {
-    ('Gyroid','Schoen_IWP'): MANUAL_WEIGHT_GRID,
+    ('Gyroid'): MANUAL_WEIGHT_GRID,
 }
 tpms_list = [
-    Gyroid, Schoen_IWP
+    Gyroid
 ]
-
-# MANUAL_DENSITY_GRID = np.array([
-#     [
-#         [0.3, 0.3, 0.3],
-#         [0.3, 0.3, 0.3],
-#         [0.3, 0.3, 0.3],
-#     ],
-#     [
-#         [0.3, 0.3, 0.3],
-#         [0.3, 0.3, 0.3],
-#         [0.3, 0.3, 0.3],
-#     ],
-#     [
-#         [0.3, 0.3, 0.3],
-#         [0.3, 0.3, 0.3],
-#         [0.3, 0.3, 0.3],
-#     ],
-# ], dtype=np.float32)
 
 MANUAL_DENSITY_GRID = np.array([
     [
-        [0.4, 0.3, 0.4],
-        [0.4, 0.3, 0.4],
-        [0.4, 0.3, 0.4],
+        [0.3, 0.3, 0.3],
+        [0.3, 0.3, 0.3],
+        [0.3, 0.3, 0.3],
     ],
     [
-        [0.4, 0.3, 0.4],
-        [0.4, 0.3, 0.4],
-        [0.4, 0.3, 0.4],
+        [0.3, 0.3, 0.3],
+        [0.3, 0.3, 0.3],
+        [0.3, 0.3, 0.3],
     ],
     [
-        [0.4, 0.3, 0.4],
-        [0.4, 0.3, 0.4],
-        [0.4, 0.3, 0.4],
+        [0.3, 0.3, 0.3],
+        [0.3, 0.3, 0.3],
+        [0.3, 0.3, 0.3],
     ],
 ], dtype=np.float32)
+
+# MANUAL_DENSITY_GRID = np.array([
+#     [
+#         [0.4, 0.3, 0.4],
+#         [0.4, 0.3, 0.4],
+#         [0.4, 0.3, 0.4],
+#     ],
+#     [
+#         [0.4, 0.3, 0.4],
+#         [0.4, 0.3, 0.4],
+#         [0.4, 0.3, 0.4],
+#     ],
+#     [
+#         [0.4, 0.3, 0.4],
+#         [0.4, 0.3, 0.4],
+#         [0.4, 0.3, 0.4],
+#     ],
+# ], dtype=np.float32)
 
 # MANUAL_DENSITY_GRID = np.array([
 #     [
@@ -388,19 +388,19 @@ MANUAL_DENSITY_GRID = np.array([
 # 形状: (3, 3, 3, 3)，最后一维为 [rot_x, rot_y, rot_z]（角度）
 MANUAL_ROTATION_GRID = np.array([
     [
-        [[45.0, 0.0, 0.0], [45.0, 0.0, 0.0], [45.0, 0.0, 0.0]],
-        [[0.0, 45.0, 0.0], [0.0, 45.0, 0.0], [0.0, 45.0, 0.0]],
-        [[0.0, 0.0, 45.0], [0.0, 0.0, 45.0], [0.0, 0.0, 45.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
     ],
     [
-        [[45.0, 0.0, 0.0], [45.0, 0.0, 0.0], [45.0, 0.0, 0.0]],
-        [[0.0, 45.0, 0.0], [0.0, 45.0, 0.0], [0.0, 45.0, 0.0]],
-        [[0.0, 0.0, 45.0], [0.0, 0.0, 45.0], [0.0, 0.0, 45.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
     ],
     [
-        [[45.0, 0.0, 0.0], [45.0, 0.0, 0.0], [45.0, 0.0, 0.0]],
-        [[0.0, 45.0, 0.0], [0.0, 45.0, 0.0], [0.0, 45.0, 0.0]],
-        [[0.0, 0.0, 45.0], [0.0, 0.0, 45.0], [0.0, 0.0, 45.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
+        [[0.0, 0.0, 0.0], [0.0, 0.0, 90.0], [0.0, 0.0, 180.0]],
     ],
 ], dtype=np.float32)
 
@@ -527,7 +527,7 @@ def generate_rotation_field_from_3x3x3(resolution: int, x_range, y_range, z_rang
                                        smooth_sigma: Optional[float] = None,
                                        method: str = 'linear') -> np.ndarray:
     """
-    从 3x3x3x3 旋转网格生成高分辨率旋转场
+    从 3x3x3x3 旋转网格生成高分辨率旋转场 (纯四元数 NLERP 法)
     
     参数:
         resolution: 目标分辨率
@@ -536,20 +536,32 @@ def generate_rotation_field_from_3x3x3(resolution: int, x_range, y_range, z_rang
         method: 'linear' 或 'nearest'
     
     返回:
-        形状 (resolution, resolution, resolution, 3) 的旋转场（角度）
+        形状 (resolution, resolution, resolution, 4) 的四元数场
     """
+    from scipy.spatial.transform import Rotation as R
     if rotation_grid_3x3x3.shape != (3, 3, 3, 3):
         raise ValueError("rotation_grid_3x3x3 必须是 (3,3,3,3)")
 
+    # 1. 欧拉角转四元数 (scipy 默认四元数格式为 x, y, z, w)
+    quat_grid = R.from_euler('xyz', rotation_grid_3x3x3.reshape(-1, 3), degrees=True).as_quat()
+    quat_grid = quat_grid.reshape(3, 3, 3, 4)
+
+    # 2. 对四元数的四个通道分别进行近似线性插值 (NLERP 第一步)
     zoom_factor = (resolution / 3.0, resolution / 3.0, resolution / 3.0, 1)
     order = 1 if method == 'linear' else 0
-    R = zoom(rotation_grid_3x3x3.astype(np.float32), zoom_factor, order=order)
+    Q = zoom(quat_grid.astype(np.float32), zoom_factor, order=order)
 
+    # 3. 高斯平滑
     if smooth_sigma:
-        for i in range(3):
-            R[..., i] = gaussian_filter(R[..., i], sigma=smooth_sigma)
+        for i in range(4):
+            Q[..., i] = gaussian_filter(Q[..., i], sigma=smooth_sigma)
 
-    return R
+    # 4. 再次归一化四元数以构成合法的旋转场 (完成 NLERP 第二步)
+    q_norm = np.linalg.norm(Q, axis=-1, keepdims=True)
+    q_norm[q_norm == 0] = 1.0  # 防止除以0
+    Q_normalized = Q / q_norm
+
+    return Q_normalized
 
 def map_density_to_local_porosity(density_field: np.ndarray,
                                   min_porosity: float = 0.15,
@@ -832,26 +844,26 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
         W_sum = W.sum(axis=-1, keepdims=True)
         W = np.divide(W, W_sum, out=np.zeros_like(W), where=W_sum != 0)
 
-    # 插值旋转场（如果提供）
+    # 插值旋转场（必须是四元数场）
     if rotation_field is not None:
         if rotation_field.shape[:3] != (resolution, resolution, resolution):
-            if verbose: print(f"插值旋转场: {rotation_field.shape} -> {(resolution, resolution, resolution, 3)}")
+            if verbose: print(f"插值四元数场: {rotation_field.shape} -> {(resolution, resolution, resolution, 4)}")
             sx = resolution / rotation_field.shape[0]
             sy = resolution / rotation_field.shape[1]
             sz = resolution / rotation_field.shape[2]
             rotation_field = zoom(rotation_field.astype(np.float32), (sx, sy, sz, 1), order=1)
+            # 对插值得来的四元数场，再次归一化还原单位属性
+            q_norm = np.linalg.norm(rotation_field, axis=-1, keepdims=True)
+            q_norm[q_norm == 0] = 1.0
+            rotation_field /= q_norm
 
     # 计算混合标量场 F = Σ (W_i * F_i)
     # 优化：为了防止旋转时产生的坐标“拉扯”现象（由于绕原点旋转导致的杠杆效应），
     # 我们将旋转中心移动到当前计算域的几何中心。
-    # 这样可以最大程度减小旋转带来的位移变形。
     if rotation_field is not None:
-        # 1. 准备旋转场 (角度 -> 弧度)
-        rot_x_rad = np.deg2rad(rotation_field[..., 0])
-        rot_y_rad = np.deg2rad(rotation_field[..., 1])
-        rot_z_rad = np.deg2rad(rotation_field[..., 2])
-
-        # 2. 计算几何中心
+        from scipy.spatial.transform import Rotation as R
+        
+        # 1. 计算几何中心
         cx = (x_range[0] + x_range[1]) / 2.0
         cy = (y_range[0] + y_range[1]) / 2.0
         cz = (z_range[0] + z_range[1]) / 2.0
@@ -859,35 +871,22 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
         if verbose:
             print(f"应用坐标旋转优化: 旋转中心 set to ({cx:.2f}, {cy:.2f}, {cz:.2f})")
 
-        # 3. 将坐标移动到中心相对位置
+        # 2. 将坐标移动到中心相对位置
         X_rel = X - cx
         Y_rel = Y - cy
         Z_rel = Z - cz
 
-        # 4. 执行旋转 (顺序与 TPMS 函数内部一致: X -> Y -> Z)
-        # 绕 X 轴
-        c_x, s_x = np.cos(rot_x_rad), np.sin(rot_x_rad)
-        Y_new = Y_rel * c_x - Z_rel * s_x
-        Z_new = Y_rel * s_x + Z_rel * c_x
-        Y_rel, Z_rel = Y_new, Z_new
+        # 3. 提取离散点形成 (N, 3) 矩阵
+        pts = np.vstack([X_rel.ravel(), Y_rel.ravel(), Z_rel.ravel()]).T
+        flat_quats = rotation_field.reshape(-1, 4)
         
-        # 绕 Y 轴
-        c_y, s_y = np.cos(rot_y_rad), np.sin(rot_y_rad)
-        X_new = X_rel * c_y + Z_rel * s_y
-        Z_new = -X_rel * s_y + Z_rel * c_y
-        X_rel, Z_rel = X_new, Z_new
+        # 4. 批量执行主动旋转 (Cython 底层C加速，比计算 sin/cos 快非常多)
+        rotated_pts = R.from_quat(flat_quats).apply(pts)
         
-        # 绕 Z 轴
-        c_z, s_z = np.cos(rot_z_rad), np.sin(rot_z_rad)
-        X_new = X_rel * c_z - Y_rel * s_z
-        Y_new = X_rel * s_z + Y_rel * c_z
-        X_rel, Y_rel = X_new, Y_new
-
-        # 5. 恢复绝对坐标 (但相对于旋转后的中心)
-        # 注意：这里我们将旋转后的相对坐标加上中心，得到“在原位置发生自旋”的效果
-        X_in = X_rel + cx
-        Y_in = Y_rel + cy
-        Z_in = Z_rel + cz
+        # 5. 分配回三维网格变量并恢复绝对坐标
+        X_in = rotated_pts[:, 0].reshape(resolution, resolution, resolution) + cx
+        Y_in = rotated_pts[:, 1].reshape(resolution, resolution, resolution) + cy
+        Z_in = rotated_pts[:, 2].reshape(resolution, resolution, resolution) + cz
     else:
         X_in, Y_in, Z_in = X, Y, Z
 

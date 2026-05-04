@@ -1,5 +1,5 @@
 # ==========================================
-# LoGrid-HTPMS Project Requirements
+# LoGIC Project Requirements
 # Environment: tpms
 # ==========================================
 
