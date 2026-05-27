@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+title: "LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction"
+authors:
+  - family-names: Pan
+    given-names: Xiaoyue
+    affiliation: "College of Information Engineering, Zhejiang University of Technology"
+    orcid: "https://orcid.org/0009-0005-6098-5571"
+repository-code: "https://github.com/pxy1118/LoGIC"
+url: "https://github.com/pxy1118/LoGIC"
+version: "1.0.0"
+license: MIT
+abstract: "LoGIC-Design is a low-dimensional grid-controlled framework for generating heterogeneous triply periodic minimal surface architectures and predicting their mechanical and fluidic performance using data-driven surrogate models."
+keywords:
+  - Heterogeneous TPMS
+  - Mechanical metamaterials
+  - Parametric design
+  - Low-dimensional control grid
+  - Performance prediction
+

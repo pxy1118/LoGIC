@@ -1,8 +1,8 @@
 # LoGIC
 
-本项目是论文 **[请在此处替换为您的论文名称]** 的官方代码库。
+本项目是论文 **LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction** 的官方代码库。
 
-LoGIC 是一种基于低分辨率网格控制的异质周期性极小曲面（TPMS）生成器。该项目不仅提供了高效的 TPMS 结构生成算法，还包含了一整套自动化的有限元分析（FEA）和计算流体力学（CFD）数据集生成流水线，以及用于预测 TPMS 结构力学和流体力学性能的深度学习模型（CNN 和 GNN）。
+LoGIC-Design（Low-dimensional Grid-based Intent-Controlled Design）是一种基于低分辨率网格控制的异质周期性极小曲面（TPMS）生成与性能预测框架。该项目不仅提供了高效的 TPMS 结构生成算法，还包含了一整套自动化的有限元分析（FEA）和计算流体力学（CFD）数据集生成流水线，以及用于预测 TPMS 结构力学和流体力学性能的深度学习模型（CNN 和 GNN）。
 
 ## 🌟 主要特性
 
@@ -50,6 +50,16 @@ LoGIC/
 - `CNN/dataset/`
 - `GNN/dataset/`
 - `dataset_generate_CFD/` (需放置 `fluid.mph`)
+
+## 版本与 DOI
+
+本仓库已准备通过 GitHub Release 和 Zenodo GitHub integration 归档生成 DOI。计划首个正式归档版本为：
+
+- Tag: `v1.0.0`
+- Release title: `LoGIC-Design v1.0.0`
+- Release description: paper-submission version of the LoGIC-Design codebase
+
+发布 `v1.0.0` release 后，Zenodo 将归档该版本并生成 DOI；获得 DOI 后，可在本节补充 DOI badge 和正式 DOI 链接。
 
 ## 环境依赖
 
@@ -121,17 +131,19 @@ python scripts/6_evaluate_all.py
 
 ## 📝 引用 (Citation)
 
-如果您在研究中使用了本代码库，请引用我们的论文：
+如果您在研究中使用了本代码库，请引用本仓库的固定发布版本。GitHub 会读取根目录下的 [`CITATION.cff`](CITATION.cff) 并显示引用入口；Zenodo 归档 `v1.0.0` release 后，请优先使用 Zenodo 生成的 DOI。
 
 ```bibtex
-@article{your_paper_citation_key,
-  title={Your Paper Title},
-  author={Author Names},
-  journal={Journal Name},
-  year={202X},
-  publisher={Publisher}
+@software{pan_logic_design_2026,
+  author  = {Pan, Xiaoyue},
+  title   = {LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction},
+  year    = {2026},
+  version = {1.0.0},
+  url     = {https://github.com/pxy1118/LoGIC}
 }
 ```
+
+论文正式发表后，请同时引用论文版本的 DOI 或期刊引用信息。
 
 ## 📄 许可证 (License)
 
