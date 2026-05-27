@@ -9,6 +9,7 @@ authors:
     orcid: "https://orcid.org/0009-0005-6098-5571"
 repository-code: "https://github.com/pxy1118/LoGIC"
 url: "https://github.com/pxy1118/LoGIC"
+doi: "10.5281/zenodo.20411608"
 version: "1.0.0"
 license: MIT
 abstract: "LoGIC-Design is a low-dimensional grid-controlled framework for generating heterogeneous triply periodic minimal surface architectures and predicting their mechanical and fluidic performance using data-driven surrogate models."
@@ -18,4 +19,3 @@ keywords:
   - Parametric design
   - Low-dimensional control grid
   - Performance prediction
-

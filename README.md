@@ -1,5 +1,7 @@
 # LoGIC
 
+[![DOI](https://zenodo.org/badge/1163288122.svg)](https://doi.org/10.5281/zenodo.20411608)
+
 Official code repository for the manuscript **LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction**.
 
 LoGIC-Design, short for Low-dimensional Grid-based Intent-Controlled Design, is a framework for generating heterogeneous triply periodic minimal surface (TPMS) architectures and predicting their mechanical and fluidic performance. The repository includes the core TPMS generator, automated finite element analysis (FEA) and computational fluid dynamics (CFD) dataset-generation pipelines, and deep learning surrogate models based on CNNs and GNNs.
@@ -55,13 +57,10 @@ Place downloaded files in the corresponding directories:
 
 ## Version and DOI
 
-This repository is prepared for archival through GitHub Releases and the Zenodo GitHub integration. The first formal archived version is planned as:
+This repository is archived through GitHub Releases and the Zenodo GitHub integration. The current public Zenodo DOI is:
 
-- Tag: `v1.0.0`
-- Release title: `LoGIC-Design v1.0.0`
-- Release description: paper-submission version of the LoGIC-Design codebase
-
-After the `v1.0.0` release is published, Zenodo will archive the release and generate a DOI. Once the DOI is available, add the DOI badge and DOI link to this section.
+- DOI: [`10.5281/zenodo.20411608`](https://doi.org/10.5281/zenodo.20411608)
+- Archived version: `v1.0.0`
 
 ## Installation
 
@@ -142,7 +141,7 @@ python scripts/6_evaluate_all.py
 
 ## Citation
 
-If you use this codebase in your research, please cite the archived software release. GitHub reads the repository-level [`CITATION.cff`](CITATION.cff) file and displays a citation entry automatically. After Zenodo archives the `v1.0.0` release, please cite the Zenodo DOI.
+If you use this codebase in your research, please cite the archived software release. GitHub reads the repository-level [`CITATION.cff`](CITATION.cff) file and displays a citation entry automatically. Please cite the Zenodo DOI for the archived `v1.0.0` release.
 
 ```bibtex
 @software{pan_logic_design_2026,
@@ -150,6 +149,7 @@ If you use this codebase in your research, please cite the archived software rel
   title   = {LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction},
   year    = {2026},
   version = {1.0.0},
+  doi     = {10.5281/zenodo.20411608},
   url     = {https://github.com/pxy1118/LoGIC}
 }
 ```
