@@ -45,9 +45,11 @@ LoGIC/
 
 ## Dataset
 
-The dataset associated with this project is hosted on Hugging Face:
+The dataset associated with this project is hosted on Hugging Face and has a separate dataset DOI:
 
-[https://huggingface.co/datasets/pxy1118/LoGIC-Dataset](https://huggingface.co/datasets/pxy1118/LoGIC-Dataset)
+- Dataset repository: [https://huggingface.co/datasets/pxy1118/LoGIC-Dataset](https://huggingface.co/datasets/pxy1118/LoGIC-Dataset)
+- Dataset DOI: [`10.57967/hf/8949`](https://doi.org/10.57967/hf/8949)
+- DOI revision: `f1e12ee`
 
 Place downloaded files in the corresponding directories:
 
@@ -143,6 +145,8 @@ python scripts/6_evaluate_all.py
 
 If you use this codebase in your research, please cite the archived software release. GitHub reads the repository-level [`CITATION.cff`](CITATION.cff) file and displays a citation entry automatically. Please cite the Zenodo DOI for the archived `v1.0.0` release.
 
+Software citation:
+
 ```bibtex
 @software{pan_logic_design_2026,
   author  = {Pan, Xiaoyue},
@@ -151,6 +155,19 @@ If you use this codebase in your research, please cite the archived software rel
   version = {1.0.0},
   doi     = {10.5281/zenodo.20411608},
   url     = {https://github.com/pxy1118/LoGIC}
+}
+```
+
+Dataset citation:
+
+```bibtex
+@dataset{pan_logic_dataset_2026,
+  author  = {Pan, Xiaoyue},
+  title   = {LoGIC-Dataset},
+  year    = {2026},
+  doi     = {10.57967/hf/8949},
+  url     = {https://huggingface.co/datasets/pxy1118/LoGIC-Dataset},
+  note    = {Hugging Face dataset DOI, revision f1e12ee}
 }
 ```
 
