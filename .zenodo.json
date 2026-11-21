@@ -1,0 +1,27 @@
+{
+  "title": "LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction",
+  "description": "Research software for the generation of heterogeneous triply periodic minimal surface architectures and the prediction of their mechanical and hydraulic responses. This release includes geometry generation, simulation scripts, surrogate training and inference, and reproduction of the paper results. The linked dataset provides simulation responses, frozen splits, model weights and reference predictions.",
+  "upload_type": "software",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Pan, Xiaoyue",
+      "affiliation": "College of Information Engineering, Zhejiang University of Technology",
+      "orcid": "0009-0005-6098-5571"
+    }
+  ],
+  "keywords": [
+    "TPMS",
+    "Mechanical metamaterials",
+    "Parametric design",
+    "Surrogate modeling"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://huggingface.co/datasets/pxy1118/LoGIC-Dataset/tree/97988689ed31266beffc05f4af5b46280bd62795",
+      "relation": "requires",
+      "resource_type": "dataset",
+      "scheme": "url"
+    }
+  ]
+}
