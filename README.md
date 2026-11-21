@@ -1,178 +1,69 @@
 # LoGIC
 
-[![DOI](https://zenodo.org/badge/1163288122.svg)](https://doi.org/10.5281/zenodo.20411608)
+LoGIC represents heterogeneous Gyroid, Diamond and Primitive structures with spatially varying topology weights, density and orientation on a 3 × 3 × 3 control lattice. This directory contains the integrated-orientation generator, geometry-control experiments, simulation scripts, trained-model inference and paper figure code. The companion dataset repository's `main` branch contains the input geometries, simulation responses, fixed splits, ensemble weights and reference predictions. [LoGIC-Dataset](https://huggingface.co/datasets/pxy1118/LoGIC-Dataset)
 
-Official code repository for the manuscript **LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction**.
+| Application | Input | Prediction | Training / validation / test |
+|---|---|---|---|
+| Uniaxial compression | 351 control variables, 38 geometry descriptors, 80³ fractional occupancy from 240³ solid voxels | Eight POD coefficients reconstruct 1,001 stress values over 0–5% strain | 304 / 67 / 62 |
+| Steady flow along z | Initial 240³ solid geometry resampled on the 64³ query grid and the control field | Three velocity components, outlet-referenced pressure, apparent permeability and pressure drop | 353 / 73 / 75 |
 
-LoGIC-Design, short for Low-dimensional Grid-based Intent-Controlled Design, is a framework for generating heterogeneous triply periodic minimal surface (TPMS) architectures and predicting their mechanical and fluidic performance. The repository includes the core TPMS generator, automated finite element analysis (FEA) and computational fluid dynamics (CFD) dataset-generation pipelines, and deep learning surrogate models based on CNNs and GNNs.
+## Run a prediction
 
-## Features
+The release was tested on Python 3.11.14 with the packages in `requirements.txt`. The reference ensemble inference supports CPU and CUDA. For the following commands, start in this directory and place the downloaded `LoGIC-Dataset` repository alongside the `LoGIC` repository. For a different local layout, substitute the path to the dataset repository root.
 
-- **Heterogeneous TPMS generation**: controls topology weights, density fields, and rotation fields through low-dimensional grids such as `3 x 3 x 3`, enabling smooth transitions across heterogeneous TPMS architectures and supporting both solid and fluid domain generation.
-- **Automated dataset generation**:
-  - **FEA pipeline**: batch geometry generation, meshing, Abaqus simulation, and post-processing for structural mechanics datasets.
-  - **CFD pipeline**: fluid-domain extraction and processing with Blender, Materialise 3-matic, and COMSOL Multiphysics.
-- **Deep learning performance prediction**:
-  - **CNN model**: predicts structural responses from 3D voxel representations.
-  - **GNN model**: predicts fluidic performance from pore-network graphs, with local features extracted by CNN backbones.
-- **Interactive UI**: provides a Tkinter-based interface for interactive TPMS design and preview.
-
-## Repository Structure
-
-```text
-LoGIC/
-├── tpms_hybrid.py              # Core TPMS generation algorithm
-├── UI/                         # Tkinter graphical user interface
-│   └── tpms_ui.py              # UI entry point
-├── dataset_generate_FEA/       # FEA dataset-generation pipeline
-│   ├── 1_generate_dataset.py   # Generate TPMS samples
-│   ├── 3_batch_run_abaqus.py   # Run Abaqus simulations in batch
-│   └── ...
-├── dataset_generate_CFD/       # CFD dataset-generation pipeline
-│   ├── 1_generate_dataset.py   # Generate fluid-domain samples
-│   ├── 2_process_fluid_blender.py
-│   ├── 4_run_comsol_simulation_v2.py
-│   └── ...
-├── CNN/                        # CNN surrogate model
-│   ├── configs/                # Model configuration files
-│   ├── models/                 # CNN architectures
-│   └── scripts/                # Training, prediction, and evaluation scripts
-└── GNN/                        # Graph neural network surrogate model
-    ├── configs/                # Model configuration files
-    ├── models/                 # Pore-GNN architectures
-    └── scripts/                # Graph construction, training, and evaluation scripts
+```sh
+python -m pip install -r requirements.txt
+python ../LoGIC-Dataset/unpack.py --output data
+python predict.py fea --sample data/fea/samples/61 --models ../LoGIC-Dataset/models --output outputs/fea61
+python predict.py cfd --sample data/cfd/samples/38 --models ../LoGIC-Dataset/models --output outputs/cfd38
 ```
 
-## Dataset
+The FEA example writes `curve.csv` with dimensionless engineering strain, stress in MPa and the across-seed sample standard deviation, plus `metrics.json`. For a single member the standard deviation column is empty. The CFD example writes `field.npz` with velocity in m/s and gauge pressure in Pa, plus scalar `metrics.json`. Both examples use every ensemble member. Select one with `--seed 17` or choose GPU inference with `--device cuda`.
 
-The dataset associated with this project is hosted on Hugging Face and has a separate dataset DOI:
+For a new FEA design, supply `controls.npz`, `features.json` and `voxel.npz` with the same initial geometry schema and physical protocol as the released cohort. For a new CFD design, supply `controls.npz`, `voxel.npz` and `--grid grid.json` with `origin_mm`, `spacing_mm` and `shape` in x, y, z order. Released CFD examples use their own coordinates in `query_grids.json`. The predictors read the initial inputs and grid geometry only.
 
-- Dataset repository: [https://huggingface.co/datasets/pxy1118/LoGIC-Dataset](https://huggingface.co/datasets/pxy1118/LoGIC-Dataset)
-- Dataset DOI: [`10.57967/hf/8949`](https://doi.org/10.57967/hf/8949)
-- DOI revision: `f1e12ee`
+## Reproduce the reported results
 
-Place downloaded files in the corresponding directories:
-
-- `CNN/dataset/`
-- `GNN/dataset/`
-- `dataset_generate_CFD/` (requires `fluid.mph` for the CFD workflow)
-
-## Version and DOI
-
-This repository is archived through GitHub Releases and the Zenodo GitHub integration. The current public Zenodo DOI is:
-
-- DOI: [`10.5281/zenodo.20411608`](https://doi.org/10.5281/zenodo.20411608)
-- Archived version: `v1.0.0`
-
-## Installation
-
-### Python Environment
-
-Python 3.11 or later is recommended. Install the required Python dependencies with:
-
-```bash
-pip install -r requirements.txt
+```sh
+python check_results.py --release ../LoGIC-Dataset --data data
+python figures.py --release ../LoGIC-Dataset --data data --output outputs/figures
 ```
 
-If GPU acceleration is needed, install the PyTorch build that matches the local CUDA version.
+The first command recomputes the primary ensemble metrics on all 62 mechanical and 75 flow test structures from saved predictions and simulation targets. The second redraws Figures 7–11 using the published data and sample IDs. To redraw only Figure 9, append `9`. The representative compression structures have public FEA IDs 61, 51 and 136, in ascending order of the three selected error ranks.
 
-### External Software Dependencies
+## Train or repeat the geometry experiment
 
-The full dataset-generation workflow requires several commercial or external simulation tools:
+Run these from this directory after unpacking both datasets into `data`. The training commands create fresh study directories. The formal training configurations use CUDA. The same study name resumes an interrupted run according to its frozen configuration.
 
-- **Abaqus** for FEA simulation in `dataset_generate_FEA`.
-- **Blender** for initial fluid-domain mesh processing in `dataset_generate_CFD`.
-- **Materialise 3-matic** for fluid-domain remeshing and mesh optimization.
-- **COMSOL Multiphysics** for CFD simulation.
-
-These tools are only required for regenerating simulation datasets. The core generator and learning-model scripts can be used separately when the required data are available.
-
-## Usage
-
-### Interactive Design UI
-
-Run the Tkinter interface for interactive TPMS design and preview:
-
-```bash
-python UI/tpms_ui.py
+```sh
+python research/fea_prediction/main.py study run --study-id fea_reproduction --dataset data/fea --config research/fea_prediction/configs/paper_fea.json
+python research/cfd_prediction/study.py init --name cfd_reproduction
+python research/cfd_prediction/study.py run --name cfd_reproduction
+python research/geometry_validation/main.py init --study geometry_reproduction
+python research/geometry_validation/main.py run --study geometry_reproduction
 ```
 
-### FEA Dataset Generation
+For other dataset locations use `--dataset` for FEA training, `LOGIC_CFD_DATA` for CFD training and `LOGIC_FEA_DATA` for geometry validation. The geometry experiment uses the original IDs only in its deterministic selection of the 50 reused designs. Fresh runs report public FEA IDs. Exact subset membership for the mechanical study is distributed in `results/fea/subsets.json`.
 
-Run the numbered scripts in order:
+## Source layout
 
-```bash
-cd dataset_generate_FEA
-python 1_generate_dataset.py
-python 2_process_volmesh.py
-python 3_batch_run_abaqus.py
-python 4_batch_postprocess.py
-python 5_aggregate_postprocessed_curves.py
-```
+| Path | Purpose |
+|---|---|
+| `tpms_hybrid.py`, `orientation_mapping.py`, `examples/` | Geometry generation and orientation-field integration |
+| `research/geometry_validation/` | Control-field experiments and initial-geometry measurements |
+| `research/fea_prediction/` | FEA encoders, POD reconstruction, training, evaluation and tests |
+| `research/cfd_prediction/` | Conditioned residual 3D U-Net, field and hydraulic readouts, training and evaluation |
+| `dataset_fea/` | Native geometry, meshing, Abaqus/Explicit simulation, label export and batch processing |
+| `dataset_cfd/` | Fluid-domain construction, remeshing, COMSOL batch solving and field export |
 
-### CFD Dataset Generation
+## Native simulation dependencies
 
-```bash
-cd dataset_generate_CFD
-python 1_generate_dataset.py
-```
+The released labels and trained models can be used directly with Python. Regenerating native solutions also requires the appropriate Abaqus/Explicit, Materialise 3-matic, Blender and COMSOL installations. The COMSOL Python bridge used MPh 1.3.1. The fixed CFD template is an external native input with SHA-256 `9fc8d1273435eb93948d76261d6180a14da690631f29315b039678da3e452857`. Set `LOGIC_COMSOL_TEMPLATE` to that file. Set `LOGIC_ABAQUS`, `LOGIC_TRIMATIC` and `LOGIC_BLENDER` for local executable paths. Historical configuration records retain original file references to preserve their checksums.
 
-The following CFD steps call Blender, Materialise 3-matic, and COMSOL. See the inline notes in the corresponding scripts for local software-path configuration.
-
-### CNN Training and Evaluation
-
-```bash
-cd CNN
-python scripts/1_train_cnn.py
-python scripts/2_predict.py
-python scripts/3_evaluate_all.py
-python scripts/4_visualize_results.py
-```
-
-### GNN Training and Evaluation
-
-```bash
-cd GNN
-python scripts/1_pretrain_cnn.py
-python scripts/2_extract_features.py
-python scripts/3_build_graphs.py
-python scripts/4_train_gnn.py
-python scripts/5_predict.py
-python scripts/6_evaluate_all.py
-```
+The CFD batch stages are `1_batch_fluid.py`, `2_batch_cfd.py` and `3_collect_results.py`. A new native campaign requires a source inventory referencing its prepared geometries and meshes. The inventory builder is in `dataset_cfd/campaign/build_inventory.py`. The release distributes initial design arrays, sampled response fields and scalar labels. Native solver working directories and job databases are outside this distribution.
 
 ## Citation
 
-If you use this codebase in your research, please cite the archived software release. GitHub reads the repository-level [`CITATION.cff`](CITATION.cff) file and displays a citation entry automatically. Please cite the Zenodo DOI for the archived `v1.0.0` release.
+Use [CITATION.cff](CITATION.cff) and cite the exact code commit and dataset revision used in your work. The simulation samples, split definitions, model weights and reference predictions for the paper are pinned to one dataset commit. [Dataset snapshot for the paper](https://huggingface.co/datasets/pxy1118/LoGIC-Dataset/tree/97988689ed31266beffc05f4af5b46280bd62795)
 
-Software citation:
-
-```bibtex
-@software{pan_logic_design_2026,
-  author  = {Pan, Xiaoyue},
-  title   = {LoGIC-Design: A Low-Dimensional Grid-Controlled Framework for Heterogeneous TPMS Architectures and Data-Driven Performance Prediction},
-  year    = {2026},
-  version = {1.0.0},
-  doi     = {10.5281/zenodo.20411608},
-  url     = {https://github.com/pxy1118/LoGIC}
-}
-```
-
-Dataset citation:
-
-```bibtex
-@dataset{pan_logic_dataset_2026,
-  author  = {Pan, Xiaoyue},
-  title   = {LoGIC-Dataset},
-  year    = {2026},
-  doi     = {10.57967/hf/8949},
-  url     = {https://huggingface.co/datasets/pxy1118/LoGIC-Dataset},
-  note    = {Hugging Face dataset DOI, revision f1e12ee}
-}
-```
-
-After the manuscript is formally published, please also cite the paper DOI or journal reference.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+Source code uses the accompanying MIT license.

@@ -1,0 +1,49 @@
+{
+  "status": "USER_SELECTED_DEFAULT",
+  "utc": "2026-10-02T14:28:46Z",
+  "authorization": "User requested default 3e-5 s, cancellation of remaining tests, and deletion of prior experiment results",
+  "old_default_sha256": "03d62943b45220a04086909b4a1f915f90ea489f87b011bc1b2f9e9c83a6a7be",
+  "new_default_sha256": "4e9fa847a95f44dadd9ef9682b608a4da58361b78c34c605cbc12366b354cd55",
+  "selected": {
+    "element_type": "C3D10",
+    "solver": {
+      "cpus": 16,
+      "domains": 16,
+      "double": "both",
+      "history_intervals": 4000,
+      "field_intervals": 10,
+      "mass_scaling_dt_s": 3e-05,
+      "mass_scaling_mode": "variable",
+      "mass_scaling_frequency": 100,
+      "threads_per_mpi_process": 1
+    },
+    "loading": {
+      "max_strain": 0.05,
+      "mean_speed_mm_s": 0.375,
+      "friction": 0.2,
+      "platen_size_mm": 10.5,
+      "platen_contact": "general",
+      "contact_penalty_scale": 1
+    },
+    "mesh": {
+      "surface_edge_mm": 0.25,
+      "volume_edge_mm": 0.25,
+      "element_type": "C3D10",
+      "midside_policy": "exact_edge_midpoints",
+      "remesh_method": "adaptive",
+      "repair_surface_defects": false,
+      "overlap_tolerance_mm": 1e-05,
+      "surface_wrap": {
+        "enabled": false
+      },
+      "surface_preserve_contours": false
+    }
+  },
+  "evidence_files": {},
+  "additional_topology_validation": "CANCELLED_BY_USER",
+  "prepared_pool_migrated": true,
+  "basis": "Explicit user selection; previous experiment results scheduled for deletion",
+  "pool_migration": "runs\\design500_adaptive025_20261001\\protocol\\solver_updates\\20261002_c3d10_dt3e5\\migration.json",
+  "pool_migration_sha256": "516f5297f6cb5a0aad1869d420aa0aeb05efe633b9168c2448d2eb74fd40334e",
+  "updated_prepared_inputs": 500
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "purpose": "Selected-model CFD experiment; no architecture search.",
+  "source_dataset": "../../../data/cfd",
+  "minimum_samples": 500,
+  "selected_variant": "none",
+  "selection_reference": "selection_reference.json",
+  "model": {
+    "widths": [
+      16,
+      32,
+      64,
+      96
+    ],
+    "dropout": 0.1,
+    "extra_depth": 0,
+    "expected_parameters": 1495062
+  },
+  "training": {
+    "device": "cuda",
+    "batch_size": 2,
+    "accumulation": 4,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "cpu_threads": 2,
+    "amp": true
+  },
+  "loss": {
+    "velocity": 1.0,
+    "pressure": 1.0,
+    "log_scalars": 0.2,
+    "flux_consistency": 0.05
+  },
+  "formal": {
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "epochs": 250,
+    "patience": 40
+  },
+  "resources": {
+    "minimum_free_RAM_GiB": 16,
+    "minimum_free_disk_GiB": 30,
+    "gpu_memory_fraction": 0.75
+  },
+  "report": {
+    "bootstrap_repetitions": 10000,
+    "bootstrap_seed": 20261113,
+    "figures": true,
+    "font_family": "Arial",
+    "dpi": 600,
+    "representative_fields": 3
+  },
+  "benchmark": {
+    "enabled": true,
+    "warmup": 50,
+    "repetitions": 200
+  },
+  "wait_poll_seconds": 30,
+  "test_policy": "Evaluation requires the selected method, frozen dataset/config/code and all completed seed checkpoints. Original split and geometry groups are preserved."
+}

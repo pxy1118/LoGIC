@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "profile": "legacy_aligned_candidate",
+  "status": "CANDIDATE_NOT_EXECUTED_NOT_FROZEN",
+  "supersedes_production_candidate": "Stokes_0p1mm_s_fusion_exploration",
+  "source": {
+    "geometry_count": 500,
+    "split_counts": {
+      "train": 350,
+      "validation": 75,
+      "test": 75
+    },
+    "paired_fea_count": 433,
+    "regenerate_solid": false,
+    "mutate_fea_source": false
+  },
+  "geometry": {
+    "specimen_size_mm": 7.5,
+    "original_specimen_size_mm": 24.0,
+    "dimensional_scale": 0.3125,
+    "side_inset_each_mm": 0.03125,
+    "buffer_each_end_mm": 0.15625,
+    "fluid_width_mm": 7.4375,
+    "flow_domain_length_mm": 7.8125,
+    "box_origin_mm": [
+      0.03125,
+      0.03125,
+      -0.15625
+    ],
+    "box_dimensions_mm": [
+      7.4375,
+      7.4375,
+      7.8125
+    ],
+    "boolean_backend": "Blender EXACT",
+    "surface_remesh_sequence": [
+      "adaptive",
+      "uniform",
+      "adaptive"
+    ],
+    "surface_triangle_target_mm": 0.046875,
+    "preserve_surface_contours": false,
+    "source_solid": "actual initial FEA solid surface",
+    "crop_note": "CFD side crop is inherited proportionally; FEA solid remains unchanged"
+  },
+  "physics": {
+    "interface": "LaminarFlow",
+    "steady": true,
+    "incompressible": true,
+    "include_inertia": true,
+    "StokesFlowProp": false,
+    "density_kg_m3": 1000.0,
+    "viscosity_Pa_s": 0.001,
+    "inlet_velocity_m_s": 0.001,
+    "outlet_pressure_Pa": 0.0,
+    "wall": "NoSlip",
+    "outlet_normal_flow_constraint": false,
+    "outlet_suppress_backflow": true,
+    "velocity_pressure_order": "P1/P1"
+  },
+  "mesh": {
+    "surface_target_mm": 0.046875,
+    "volume_hmax_mm": 0.25,
+    "volume_hmin_mm": 0.09375,
+    "hgrad": 1.15,
+    "hcurve": 0.6,
+    "hnarrow": 0.7,
+    "policy": "same legacy controls and relative sizes; validate on new geometry"
+  },
+  "measurement": {
+    "pressure_sections": "outer inlet and outlet buffer ends",
+    "reference_area_m2": 5.531640625000001e-05,
+    "measurement_length_m": 0.0078125,
+    "nominal_specimen_length_m": 0.0075,
+    "permeability_scope": "apparent flow-domain permeability at the prescribed inlet speed",
+    "primary_K_field": "K_domain_app_z_m2",
+    "pressure_gradient_unit": "Pa/m",
+    "use_actual_signed_flux": true,
+    "formula": "K = mu*(Q/A)*L_meas/(p_in-p_out)",
+    "legacy_20mm_parameters_copied": false
+  },
+  "prediction": {
+    "main_model": "existing Pore-GNN",
+    "voxel_size": 120,
+    "voxel_representation": "binary initial-solid occupancy; sampling rule to freeze",
+    "targets": [
+      "ln(K_domain_app_z_m2 / 1 m^2)",
+      "pressure_gradient_Pa_m"
+    ],
+    "log_base": "e",
+    "inherit_config": "GNN/configs/default.yaml",
+    "architecture_search": false,
+    "CGV_main_model": false,
+    "split_source": "existing geometry IDs and groups, not the old random 80/20 loader",
+    "pretraining_and_scalers": "training split only",
+    "checkpoint_selection": "validation only",
+    "test_policy": "once after method freeze"
+  },
+  "development": {
+    "preserve_previous_runs": true,
+    "reuse_Stokes_labels_for_production": false,
+    "recompute_after_protocol_change": true,
+    "full_queue_started": false,
+    "checks": [
+      "surface deviation and pore connectivity",
+      "mass conservation",
+      "representative mesh sensitivity",
+      "velocity dependence and Reynolds number"
+    ],
+    "K_mesh_sensitivity_target_rel": 0.02,
+    "mass_imbalance_target_rel": 0.001
+  },
+  "provenance": {
+    "prepared_utc": "2026-11-07T07:41:01Z",
+    "legacy_template": "D:\\Workplace\\Papers\\TPMS\\dataset_generate\\fluid.mph",
+    "legacy_template_sha256": "9fc8d1273435eb93948d76261d6180a14da690631f29315b039678da3e452857",
+    "legacy_flow_type": "LaminarFlow",
+    "inherited_poregnn_config_sha256": "cad7361c0259ca8b040c89c3d362ae73a64653c62b870760018938e3e8cad124"
+  }
+}

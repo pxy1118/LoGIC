@@ -1,0 +1,12 @@
+{
+  "selected_variant": "none",
+  "selection_split": "validation",
+  "test_evaluated": false,
+  "rule": {
+    "score": "mean relative velocity vector L2 + mean relative pressure L2 + 0.5*(MAE lnK + MAE lnDeltaP)",
+    "minimum_relative_gain_for_extra_complexity": 0.03,
+    "maximum_task_regression": 0.05,
+    "rule": "Use the best mean validation score across the two seeds. Prefer plain U-Net unless an enhanced candidate improves mean score by >=3%, wins both paired seeds, and does not regress any task by >5%. If enhanced candidates differ by <1%, prefer lower measured epoch time.",
+    "test_used_for_selection": false
+  }
+}

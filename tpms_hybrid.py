@@ -15,6 +15,9 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import matplotlib.cm as cm
 from matplotlib.colors import to_rgb
 import colorsys
+from orientation_mapping import (
+    interpolate_rotation_grid, integrate_orientation_field, mapping_diagnostics,
+)
 
 try:
     import pyvista as pv
@@ -34,13 +37,13 @@ def Gyroid(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -60,13 +63,13 @@ def FKS(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -79,20 +82,20 @@ def FKS(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
         + np.cos(scale*x) * np.cos(2*scale*y) * np.sin(scale*z)
         + np.sin(scale*x) * np.cos(scale*y) * np.cos(2*scale*z)
     )
-    
+
 def Diamond(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     # 1. 绕 X 轴旋转
     cos_rx, sin_rx = np.cos(rot_x), np.sin(rot_x)
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -100,7 +103,7 @@ def Diamond(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     x, y = x_new, y_new
 
     # 4. 计算 Diamond (使用旋转后的坐标)
-    return (np.sin(scale*y)*np.sin(scale*z) +
+    return (np.sin(scale*x)*np.sin(scale*y)*np.sin(scale*z) +
             np.sin(scale*x)*np.cos(scale*y)*np.cos(scale*z) +
             np.cos(scale*x)*np.sin(scale*y)*np.cos(scale*z) +
             np.cos(scale*x)*np.cos(scale*y)*np.sin(scale*z))
@@ -112,13 +115,13 @@ def Primitive(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -135,13 +138,13 @@ def Neovius(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -159,13 +162,13 @@ def Schoen_IWP(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -185,13 +188,13 @@ def Lidinoid(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -212,13 +215,13 @@ def my_tpms(x, y, z, scale=2*np.pi/3, rot_x=0, rot_y=0, rot_z=0):
     y_new = y * cos_rx - z * sin_rx
     z_new = y * sin_rx + z * cos_rx
     y, z = y_new, z_new
-    
+
     # 2. 绕 Y 轴旋转
     cos_ry, sin_ry = np.cos(rot_y), np.sin(rot_y)
     x_new = x * cos_ry + z * sin_ry
     z_new = -x * sin_ry + z * cos_ry
     x, z = x_new, z_new
-    
+
     # 3. 绕 Z 轴旋转
     cos_rz, sin_rz = np.cos(rot_z), np.sin(rot_z)
     x_new = x * cos_rz - y * sin_rz
@@ -477,7 +480,7 @@ def get_tpms_functions(tpms_names: Sequence[str]) -> List[Callable]:
 
 # ================== 权重矩阵生成 ==================
 
-def generate_weight_matrix(resolution: int, x_range, y_range, z_range, grid_N: np.ndarray, 
+def generate_weight_matrix(resolution: int, x_range, y_range, z_range, grid_N: np.ndarray,
                           smooth_sigma=None, normalize_channels: bool = True):
     if grid_N.ndim != 4 or grid_N.shape[:3] != (3,3,3):
         raise ValueError("需要提供 shape=(3,3,3,N) 的手动权重网格 grid_N")
@@ -494,7 +497,7 @@ def generate_weight_matrix(resolution: int, x_range, y_range, z_range, grid_N: n
 
     return np.clip(W, 0.0, 1.0)
 
-def generate_random_weight_grid(N: int, seed=None, smooth_bias=False, boundary_fixed=False, 
+def generate_random_weight_grid(N: int, seed=None, smooth_bias=False, boundary_fixed=False,
                                normalize_channels: bool = True, uniform_when_single: bool = True):
     if seed is not None:
         np.random.seed(seed)
@@ -547,40 +550,19 @@ def generate_rotation_field_from_3x3x3(resolution: int, x_range, y_range, z_rang
                                        method: str = 'linear') -> np.ndarray:
     """
     从 3x3x3x3 旋转网格生成高分辨率旋转场 (纯四元数 NLERP 法)
-    
+
     参数:
         resolution: 目标分辨率
         rotation_grid_3x3x3: 形状 (3,3,3,3)，最后一维为 [rot_x, rot_y, rot_z]（角度）
         smooth_sigma: 可选高斯平滑
         method: 'linear' 或 'nearest'
-    
+
     返回:
         形状 (resolution, resolution, resolution, 4) 的四元数场
     """
-    from scipy.spatial.transform import Rotation as R
     if rotation_grid_3x3x3.shape != (3, 3, 3, 3):
         raise ValueError("rotation_grid_3x3x3 必须是 (3,3,3,3)")
-
-    # 1. 欧拉角转四元数 (scipy 默认四元数格式为 x, y, z, w)
-    quat_grid = R.from_euler('xyz', rotation_grid_3x3x3.reshape(-1, 3), degrees=True).as_quat()
-    quat_grid = quat_grid.reshape(3, 3, 3, 4)
-
-    # 2. 对四元数的四个通道分别进行近似线性插值 (NLERP 第一步)
-    zoom_factor = (resolution / 3.0, resolution / 3.0, resolution / 3.0, 1)
-    order = 1 if method == 'linear' else 0
-    Q = zoom(quat_grid.astype(np.float32), zoom_factor, order=order)
-
-    # 3. 高斯平滑
-    if smooth_sigma:
-        for i in range(4):
-            Q[..., i] = gaussian_filter(Q[..., i], sigma=smooth_sigma)
-
-    # 4. 再次归一化四元数以构成合法的旋转场 (完成 NLERP 第二步)
-    q_norm = np.linalg.norm(Q, axis=-1, keepdims=True)
-    q_norm[q_norm == 0] = 1.0  # 防止除以0
-    Q_normalized = Q / q_norm
-
-    return Q_normalized
+    return interpolate_rotation_grid(rotation_grid_3x3x3, resolution, smooth_sigma, method)
 
 def map_density_to_local_porosity(density_field: np.ndarray,
                                   min_porosity: float = 0.15,
@@ -652,8 +634,8 @@ def create_fluid_domain_from_solid_mask(
     solid_mask: np.ndarray,
     x_range, y_range, z_range,
     resolution: int,
-    add_boundary_box: bool = True,
-    boundary_thickness: int = 2,
+    add_boundary_box: bool = False,
+    boundary_thickness: int = 0,
     z_extension: float = 0.0,  # ← 新增：Z 方向物理扩展长度（单位：与坐标系一致）
     smooth: bool = True,
     smooth_iter: int = 10,
@@ -663,7 +645,7 @@ def create_fluid_domain_from_solid_mask(
 ) -> Any:
     """
     从实体掩码生成流体域网格，支持 Z 轴方向扩展以提供入口/出口缓冲区。
-    
+
     参数:
         solid_mask: 实体结构的布尔掩码 (True=实体, False=流体)，shape=(res, res, res)
         x_range, y_range, z_range: 原始物理坐标范围，如 (-1.5, 1.5)
@@ -676,14 +658,14 @@ def create_fluid_domain_from_solid_mask(
     if verbose:
         print(f"生成流体域: 分辨率 {resolution}^3, Z 扩展 = {z_extension:.2f}")
     t0 = time.time()
-    
+
     # 计算原始体素尺寸
     orig_spacing = (
         (x_range[1] - x_range[0]) / (resolution - 1),
         (y_range[1] - y_range[0]) / (resolution - 1),
         (z_range[1] - z_range[0]) / (resolution - 1)
     )
-    
+
     # 流体掩码 = 实体掩码的反向
     fluid_mask = ~solid_mask  # shape: (res, res, res)
 
@@ -693,26 +675,26 @@ def create_fluid_domain_from_solid_mask(
         z_ext_voxels = int(np.ceil(z_extension / orig_spacing[2]))
         if z_ext_voxels <= 0:
             z_ext_voxels = 1
-        
+
         # 创建扩展后的掩码
         new_z_size = resolution + 2 * z_ext_voxels
         extended_fluid_mask = np.zeros((resolution, resolution, new_z_size), dtype=bool)
-        
+
         # 将原始流体掩码放入中间
         extended_fluid_mask[:, :, z_ext_voxels:-z_ext_voxels] = fluid_mask
-        
+
         # 上下扩展区域设为流体（True）
         extended_fluid_mask[:, :, :z_ext_voxels] = True   # 下方扩展区
         extended_fluid_mask[:, :, -z_ext_voxels:] = True  # 上方扩展区
-        
+
         fluid_mask = extended_fluid_mask
-        
+
         # 更新 z_range 以反映物理扩展
         z_range = (
             z_range[0] - z_extension,
             z_range[1] + z_extension
         )
-        
+
         # 更新 Z 方向体素尺寸（总长度变长，但体素数也变多）
         new_z_length = z_range[1] - z_range[0]
         new_z_voxels = fluid_mask.shape[2]
@@ -723,17 +705,17 @@ def create_fluid_domain_from_solid_mask(
         z_ext_voxels = 0
 
     # === 添加 X/Y 方向边界盒（Z 方向保持开放）===
-    if add_boundary_box:
+    if add_boundary_box and boundary_thickness > 0:
         boundary_mask = np.zeros_like(fluid_mask)
         t = boundary_thickness
-        
+
         # 仅封闭 X 和 Y 方向（侧壁）
         boundary_mask[:t, :, :] = True   # -X
         boundary_mask[-t:, :, :] = True  # +X
         boundary_mask[:, :t, :] = True   # -Y
         boundary_mask[:, -t:, :] = True  # +Y
         # Z 方向不封闭（保持开放，用于流体流入流出）
-        
+
         # 从边界中减去实体部分（注意：solid_mask 仍是原始大小）
         # 需要将 solid_mask 扩展到新尺寸（仅 Z 向）
         if z_ext_voxels > 0:
@@ -742,34 +724,34 @@ def create_fluid_domain_from_solid_mask(
             solid_for_boundary = extended_solid_mask
         else:
             solid_for_boundary = solid_mask
-        
+
         boundary_mask = boundary_mask & (~solid_for_boundary)
         fluid_mask = fluid_mask | boundary_mask
 
     # === 后处理流体掩码 ===
     fluid_mask = _postprocess_mask(
-        fluid_mask, 
-        morph_close=True, 
+        fluid_mask,
+        morph_close=True,
         close_iter=1,
-        remove_small=remove_small, 
-        min_voxels=min_voxels, 
+        remove_small=remove_small,
+        min_voxels=min_voxels,
         verbose=verbose
     )
-    
+
     # === 构建 PyVista 网格 ===
-    # 计算 origin（X/Y 扩展用于边界盒，Z 不扩展）
+    # 所有方向各补一个空体素；侧边界厚度为 0 时不额外偏移流体域。
     origin = (
-        x_range[0] - boundary_thickness * spacing[0],
-        y_range[0] - boundary_thickness * spacing[1],
+        x_range[0] - spacing[0],
+        y_range[0] - spacing[1],
         z_range[0] - spacing[2]  # Z 方向只 pad=1，不加边界厚度
     )
-    
+
     # Padding（所有方向 +1）
     padded_mask = np.pad(fluid_mask, pad_width=1, mode='constant', constant_values=False)
-    
+
     # 创建标量场
     S_fluid = padded_mask.astype(np.float32) - 0.5
-    
+
     # 设置网格
     grid = pv.ImageData()
     grid.dimensions = [
@@ -780,21 +762,21 @@ def create_fluid_domain_from_solid_mask(
     grid.origin = origin
     grid.spacing = spacing
     grid.point_data['fluid'] = S_fluid.flatten(order='F')
-    
+
     # 提取等值面
     try:
         surface = grid.contour([0.0], 'fluid', method='flying_edges')
     except Exception:
         surface = grid.contour([0.0], 'fluid')
-    
+
     # 清理小组件
     if remove_small and surface is not None and surface.n_cells > 0:
         try:
             surface = surface.connectivity(extraction_mode='largest')
         except Exception as e:
-            if verbose: 
+            if verbose:
                 print(f"流体域连通域清理失败: {e}")
-    
+
     # 平滑
     if smooth and surface is not None and surface.n_points > 0:
         try:
@@ -803,16 +785,16 @@ def create_fluid_domain_from_solid_mask(
             else:
                 surface = surface.smooth(n_iter=smooth_iter, relaxation_factor=0.01)
         except Exception as e:
-            if verbose: 
+            if verbose:
                 print(f"流体域平滑失败: {e}")
-    
+
     fluid_porosity = fluid_mask.mean()
     if verbose:
         print(f"流体域完成: 点 {surface.n_points if surface else 0}, "
               f"单元 {surface.n_cells if surface else 0}, "
               f"流体体积分数 {fluid_porosity*100:.2f}%, "
               f"耗时 {time.time()-t0:.2f}s")
-    
+
     return surface, fluid_porosity
 # ================== 核心：多 TPMS 混合实体生成（返回掩码） ==================
 
@@ -830,13 +812,36 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
                               verbose=True,
                               refine_threshold=True, refine_iters=10,
                               porosity_tol=0.005, refine_ignore_morph=True,
-                              return_mask=False):  # 🆕 新增参数
+                              return_mask=False,
+                              rotation_mode="integrated",
+                              rotation_diagnostics=None,
+                              max_axis_error_deg=None,
+                              max_phase_stretch_ratio=None,
+                              surface_boundary_mode="padded"):
     """
     从多个 TPMS 函数 + 权重体 + 可选密度场 + 可选旋转场 生成实体结构
-    
-    🆕 rotation_field: 形状 (res,res,res,3) 的旋转场，每个体素的 [rot_x, rot_y, rot_z]（角度）
+
+    rotation_field: (res,res,res,4), unit quaternions in xyzw order.
+    rotation_mode: 'integrated' (default) interprets quaternions as PHYSICAL
+        lattice orientations and fits compatible phase gradients to their
+        inverse matrices; 'legacy' preserves the old coordinate-rotation
+        semantics for reproducibility.
+    rotation_diagnostics: optional dict populated in-place for integrated mode.
+    max_axis_error_deg / max_phase_stretch_ratio: optional acceptance limits.
+        Integrated mode always rejects sampled singular or folded maps.
+    surface_boundary_mode: 'implicit_box' intersects the continuous scalar
+        field with the exact sampling box before contouring. 'padded' retains
+        the original padded-surface output.
     🆕 return_mask=True 时同时返回实体掩码，用于生成流体域
     """
+    if rotation_mode not in ("legacy", "integrated"):
+        raise ValueError("rotation_mode must be legacy or integrated")
+    if surface_boundary_mode not in ("padded", "implicit_box"):
+        raise ValueError("surface_boundary_mode must be padded or implicit_box")
+    if max_axis_error_deg is not None and not 0 <= max_axis_error_deg <= 90:
+        raise ValueError("max_axis_error_deg must be in [0, 90]")
+    if max_phase_stretch_ratio is not None and max_phase_stretch_ratio < 1:
+        raise ValueError("max_phase_stretch_ratio must be >= 1")
     if verbose:
         names = [f.__name__ for f in tpms_funcs]
         print(f"生成混合实体: 分辨率 {resolution}^3, 使用 {len(tpms_funcs)} 个 TPMS: {names}")
@@ -865,6 +870,11 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
 
     # 插值旋转场（必须是四元数场）
     if rotation_field is not None:
+        rotation_field = np.asarray(rotation_field, dtype=float)
+        if rotation_field.ndim != 4 or rotation_field.shape[-1] != 4:
+            raise ValueError("rotation_field must have shape (nx, ny, nz, 4), xyzw quaternions")
+        if not np.isfinite(rotation_field).all() or np.any(np.linalg.norm(rotation_field, axis=-1) < 1e-10):
+            raise ValueError("rotation_field contains invalid or zero quaternions")
         if rotation_field.shape[:3] != (resolution, resolution, resolution):
             if verbose: print(f"插值四元数场: {rotation_field.shape} -> {(resolution, resolution, resolution, 4)}")
             sx = resolution / rotation_field.shape[0]
@@ -877,11 +887,28 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
             rotation_field /= q_norm
 
     # 计算混合标量场 F = Σ (W_i * F_i)
-    # 优化：为了防止旋转时产生的坐标“拉扯”现象（由于绕原点旋转导致的杠杆效应），
-    # 我们将旋转中心移动到当前计算域的几何中心。
-    if rotation_field is not None:
+    # Integrated mode fits compatible phase gradients. Legacy mode rotates
+    # points about the domain center; centering does not remove gradient strain.
+    if rotation_field is not None and rotation_mode == "integrated":
+        ranges = (x_range, y_range, z_range)
+        X_in, Y_in, Z_in = integrate_orientation_field(rotation_field, ranges)
+        quality = mapping_diagnostics((X_in, Y_in, Z_in), rotation_field, ranges)
+        if rotation_diagnostics is not None:
+            rotation_diagnostics.update(quality)
+        if verbose:
+            print(f"Integrated orientation mapping: {quality}")
+        if quality["min_determinant"] <= 1e-8 or quality["min_phase_stretch"] <= 1e-6:
+            raise ValueError("Integrated orientation map is singular/folded; reduce the rotation gradient")
+        if max_axis_error_deg is not None and quality["local_z_error_max_deg"] > max_axis_error_deg:
+            raise ValueError("Integrated orientation map exceeds max_axis_error_deg")
+        if max_phase_stretch_ratio is not None and (
+            quality["max_phase_stretch"] > max_phase_stretch_ratio
+            or quality["min_phase_stretch"] < 1 / max_phase_stretch_ratio
+        ):
+            raise ValueError("Integrated orientation map exceeds phase stretch limits")
+    elif rotation_field is not None:
         from scipy.spatial.transform import Rotation as R
-        
+
         # 1. 计算几何中心
         cx = (x_range[0] + x_range[1]) / 2.0
         cy = (y_range[0] + y_range[1]) / 2.0
@@ -898,10 +925,10 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
         # 3. 提取离散点形成 (N, 3) 矩阵
         pts = np.vstack([X_rel.ravel(), Y_rel.ravel(), Z_rel.ravel()]).T
         flat_quats = rotation_field.reshape(-1, 4)
-        
+
         # 4. 批量执行主动旋转 (Cython 底层C加速，比计算 sin/cos 快非常多)
         rotated_pts = R.from_quat(flat_quats).apply(pts)
-        
+
         # 5. 分配回三维网格变量并恢复绝对坐标
         X_in = rotated_pts[:, 0].reshape(resolution, resolution, resolution) + cx
         Y_in = rotated_pts[:, 1].reshape(resolution, resolution, resolution) + cy
@@ -1005,7 +1032,19 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
     else:
         S = (used_threshold - absF).astype(np.float32)
 
-    paddedS = np.full((resolution+2, resolution+2, resolution+2), -1.0, dtype=np.float32)
+    if surface_boundary_mode == "implicit_box":
+        # Match research/build_rectangular_tpms.py: intersect scalar fields
+        # before contouring, with one exterior layer keeping the box closed.
+        # Use the research convention (negative inside). Contour algorithms
+        # classify exact zero-valued box nodes differently under sign reversal.
+        dx = np.minimum(x - x_range[0], x_range[1] - x)
+        dy = np.minimum(y - y_range[0], y_range[1] - y)
+        dz = np.minimum(z - z_range[0], z_range[1] - z)
+        clearance = np.minimum(np.minimum(dx[:, None, None], dy[None, :, None]), dz[None, None, :])
+        S = np.maximum(-S, -clearance).astype(np.float32)
+
+    exterior_value = 1.0 if surface_boundary_mode == "implicit_box" else -1.0
+    paddedS = np.full((resolution+2, resolution+2, resolution+2), exterior_value, dtype=np.float32)
     paddedS[1:-1,1:-1,1:-1] = S
 
     grid = pv.ImageData()
@@ -1017,6 +1056,12 @@ def create_hybrid_tpms_solid(tpms_funcs: List[Callable], x_range, y_range, z_ran
         surface = grid.contour([0.0], 'S', method='flying_edges')
     except Exception:
         surface = grid.contour([0.0], 'S')
+
+    if surface_boundary_mode == "implicit_box":
+        # Zero-valued box faces can produce contour lines/vertices. Keep only
+        # the actual triangles, as the research workflow does through STL.
+        surface = surface.triangulate().clean()
+        surface = pv.PolyData(surface.points, surface.faces)
 
     # 网格连通域清理
     if remove_small and surface is not None and surface.n_cells > 0:
@@ -1050,8 +1095,8 @@ def export_stl(mesh: Any, filename):
     mesh.save(filename)
     print(f"STL 已保存: {os.path.abspath(filename)}")
 
-def visualize_weight_cube_3d(weight_grid_3x3x3: np.ndarray, 
-                            tpms_names: List[str], 
+def visualize_weight_cube_3d(weight_grid_3x3x3: np.ndarray,
+                            tpms_names: List[str],
                             density_grid_3x3x3: Optional[np.ndarray] = None,
                             title="TPMS Weight & Density",
                             show_values=True,
@@ -1194,12 +1239,12 @@ def visualize_weight_cube_3d(weight_grid_3x3x3: np.ndarray,
                 # === 🏷️ 改进标签：显示前两个主导 TPMS ===
                 if show_values:
                     txt_color = 'black' if luminance(shaded_color) > 0.5 else 'white'
-                    
+
                     # 获取前两个最大权重的索引
                     sorted_indices = np.argsort(w)[::-1]
                     top1_idx, top2_idx = sorted_indices[0], sorted_indices[1] if N > 1 else None
                     top1_w = w[top1_idx]
-                    
+
                     if N == 1 or (top2_idx is not None and w[top2_idx] < 0.05):
                         # 几乎是纯的
                         label_text = f"{tpms_names[top1_idx][:4]}\n{top1_w:.1f}"
@@ -1209,9 +1254,9 @@ def visualize_weight_cube_3d(weight_grid_3x3x3: np.ndarray,
                         name1 = tpms_names[top1_idx][:2]
                         name2 = tpms_names[top2_idx][:2]
                         label_text = f"{name1}/{name2}\n{top1_w:.1f}/{top2_w:.1f}"
-                    
+
                     label_text += f"\n(d={d_raw:.1f})"
-                    
+
                     ax.text(x + 0.05, y + 0.05, z + 0.05,
                             label_text,
                             fontsize=7, color=txt_color, ha='center', va='center',
@@ -1257,7 +1302,7 @@ def visualize_weight_cube_3d(weight_grid_3x3x3: np.ndarray,
 
 # ================== 🆕 主流程（生成结构域 + 流体域） ==================
 
-def main():
+def main(rotation_mode="integrated"):
     # === 配置区 ===
     base_x = base_y = base_z = (-1.5, 1.5)
     resolution = 200
@@ -1267,14 +1312,14 @@ def main():
     replicate = (3, 3, 3)
 
     # 选择 TPMS
-    
+
     N = len(tpms_list)
 
     # 权重网格
     manual_weight_grid = get_manual_weight_grid(tpms_list)
     if manual_weight_grid is None:
         manual_weight_grid = generate_random_weight_grid(N, seed=42, normalize_channels=(N>1))
-    
+
     # 密度网格
     density_grid_3x3x3 = get_manual_density_grid(tpms_list)
 
@@ -1287,7 +1332,7 @@ def main():
     tpms_colors_light, tpms_colors_dark = get_tpms_color_pairs(tpms_names)
 
     fig, ax = visualize_weight_cube_3d(
-        manual_weight_grid, 
+        manual_weight_grid,
         tpms_names,
         density_grid_3x3x3=density_grid_3x3x3,
         title="TPMS Type & Density",
@@ -1302,7 +1347,7 @@ def main():
     fig.savefig(cube_img, dpi=200, bbox_inches='tight')
     plt.close(fig)
     print(f"立方体可视化已保存: {cube_img}")
-    
+
     # 域扩展
     if replicate != (1,1,1):
         x_range, y_range, z_range = expanded_ranges(base_x, base_y, base_z, replicate)
@@ -1313,7 +1358,7 @@ def main():
     density_field = generate_density_field_from_3x3x3(
         resolution, x_range, y_range, z_range,
         density_grid_3x3x3,
-        smooth_sigma=None, 
+        smooth_sigma=None,
         method='linear'
     )
 
@@ -1327,8 +1372,8 @@ def main():
 
     # 权重平滑
     smooth_sigma = 0.5
-    weight_volume = generate_weight_matrix(resolution, x_range, y_range, z_range, 
-                                          manual_weight_grid, smooth_sigma=smooth_sigma, 
+    weight_volume = generate_weight_matrix(resolution, x_range, y_range, z_range,
+                                          manual_weight_grid, smooth_sigma=smooth_sigma,
                                           normalize_channels=(N>1))
     combined_fields = np.concatenate([
         density_field[..., None].astype(np.float32),
@@ -1369,6 +1414,7 @@ def main():
         weight_volume=weight_volume,
         density_field=density_field,
         rotation_field=rotation_field,
+        rotation_mode=rotation_mode,
         global_target_porosity=global_target_porosity,
         resolution=resolution,
         solid_threshold=solid_threshold,
@@ -1387,7 +1433,7 @@ def main():
 
     # 最终清理
     if verbose: print("结构域最终清理/平滑...")
-    solid_mesh = finalize_mesh(solid_mesh, smooth_taubin_iter=final_taubin_iter, 
+    solid_mesh = finalize_mesh(solid_mesh, smooth_taubin_iter=final_taubin_iter,
                                do_clean=True, verbose=verbose)
     if verbose: print(f"结构域最终网格: 点 {solid_mesh.n_points}, 单元 {solid_mesh.n_cells}")
 
@@ -1409,7 +1455,7 @@ def main():
 
     # 最终清理流体域
     if verbose: print("流体域最终清理/平滑...")
-    fluid_mesh = finalize_mesh(fluid_mesh, smooth_taubin_iter=final_taubin_iter, 
+    fluid_mesh = finalize_mesh(fluid_mesh, smooth_taubin_iter=final_taubin_iter,
                                do_clean=True, verbose=verbose)
     if verbose: print(f"流体域最终网格: 点 {fluid_mesh.n_points}, 单元 {fluid_mesh.n_cells}")
 
@@ -1421,11 +1467,11 @@ def main():
             scale_factor = desired_size / max(lx, ly, lz)
             solid_mesh.scale([scale_factor]*3, inplace=True)
             fluid_mesh.scale([scale_factor]*3, inplace=True)
-            
+
             nb = solid_mesh.bounds
             if verbose:
                 print(f"已缩放: 原尺寸=({lx:.3f},{ly:.3f},{lz:.3f}) -> 新尺寸≈{desired_size}")
-            
+
             if align_origin:
                 offset = [-nb[0], -nb[2], -nb[4]]
                 solid_mesh.translate(offset, inplace=True)
@@ -1436,15 +1482,15 @@ def main():
 
     # === 🆕 导出两个 STL ===
     suffix = f"_{replicate[0]}x{replicate[1]}x{replicate[2]}" if replicate != (1,1,1) else ""
-    
+
     # 导出结构域（实体）
     solid_filename = os.path.join(output_dir, f"model_solid{suffix}.stl")
     export_stl(solid_mesh, solid_filename)
-    
+
     # 导出流体域
     fluid_filename = os.path.join(output_dir, f"model_fluid{suffix}.stl")
     export_stl(fluid_mesh, fluid_filename)
-    
+
     print("\n" + "="*60)
     print(f"✅ 生成完成!")
     print(f"   结构域: {solid_filename}")
@@ -1454,4 +1500,8 @@ def main():
     print("="*60)
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="LoGIC TPMS generator")
+    parser.add_argument("--rotation-mode", choices=("legacy", "integrated"), default="integrated",
+                        help="integrated (default) uses physical lattice angles; legacy reproduces old coordinate rotation")
+    main(rotation_mode=parser.parse_args().rotation_mode)

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "seed": 20260930,
+  "samples": 500,
+  "geometry": {
+    "size_mm": 7.5,
+    "periods": 3,
+    "resolution": 240,
+    "topologies": [
+      "Gyroid",
+      "Diamond",
+      "Primitive"
+    ],
+    "rotation_mode": "integrated",
+    "boundary_method": "implicit_box",
+    "density_range": [
+      0.25,
+      0.5
+    ],
+    "phase_offset_periods": [
+      0.1415415288339178,
+      0.45512548663603475,
+      0.4096574593690878
+    ],
+    "surface_simplify_tolerance_mm": 0,
+    "weight_smoothing_sigma_mm": 0.031512605042016806,
+    "max_neighbor_rotation_deg": 20.0,
+    "max_axis_error_deg": 10.0,
+    "max_phase_stretch_ratio": 1.6,
+    "component_cleanup": {
+      "enabled": true,
+      "max_removed_volume_fraction": 0.01
+    }
+  },
+  "mesh": {
+    "surface_edge_mm": 0.25,
+    "volume_edge_mm": 0.25,
+    "element_type": "C3D10",
+    "midside_policy": "exact_edge_midpoints",
+    "remesh_method": "adaptive",
+    "repair_surface_defects": false,
+    "overlap_tolerance_mm": 1e-05,
+    "surface_wrap": {
+      "enabled": false
+    },
+    "surface_preserve_contours": false
+  },
+  "loading": {
+    "max_strain": 0.05,
+    "mean_speed_mm_s": 0.375,
+    "friction": 0.2,
+    "platen_size_mm": 10.5,
+    "platen_contact": "general",
+    "contact_penalty_scale": 1
+  },
+  "solver": {
+    "cpus": 16,
+    "domains": 16,
+    "double": "both",
+    "history_intervals": 4000,
+    "field_intervals": 10,
+    "mass_scaling_dt_s": 3e-05,
+    "mass_scaling_mode": "variable",
+    "mass_scaling_frequency": 100,
+    "threads_per_mpi_process": 1
+  },
+  "material": {
+    "name": "Ti6Al4V",
+    "density_tonne_mm3": 4.5e-09,
+    "E_MPa": 112000.0,
+    "nu": 0.33,
+    "plastic": [
+      [
+        944,
+        0
+      ],
+      [
+        973,
+        0.002
+      ],
+      [
+        996,
+        0.007
+      ],
+      [
+        1015,
+        0.011
+      ],
+      [
+        1029,
+        0.016
+      ],
+      [
+        1040,
+        0.02
+      ],
+      [
+        1047,
+        0.025
+      ],
+      [
+        1054,
+        0.03
+      ]
+    ],
+    "johnson_cook_damage": [
+      -0.68,
+      0.73,
+      -0.25,
+      0,
+      0,
+      1670,
+      990,
+      1
+    ],
+    "damage_displacement_mm": 0.1,
+    "source": "@大论文_240513.pdf: printed p24 tables 3-1 and 3-2; density from printed p45 theoretical mass calculation",
+    "calibration_status": "THESIS_REFERENCE_UNVALIDATED",
+    "reference_gaps": [
+      "Damage initiation stress-state domain and sign convention unresolved",
+      "0.1 mm damage displacement retained only as legacy diagnostic assumption; not specified in thesis",
+      "Johnson-Cook temperatures and reference strain rate retained from legacy input; not specified in thesis",
+      "Density 4.5 g/cm3 is a thesis theoretical-mass value, not a reported FE material measurement"
+    ]
+  },
+  "simulation_reference": {
+    "title": "基于三周期极小曲面的仿生多孔骨支架植入体研究",
+    "author": "叶俊辉",
+    "pdf_path": "D:/Workplace/Papers/TPMS/参考论文/@大论文_240513.pdf",
+    "loading_page": 25,
+    "reference_speed_mm_min": 1.2,
+    "scope": "Reference material settings; user-selected speed 0.375 mm/s, 7.5 mm cube, G/D/P integrated orientation, adaptive 0.25 mm remesh and 5% endpoint. Full-step smooth displacement uses the selected speed as mean speed.",
+    "pdf_sha256": "33c4df96d822b147766cc712d1060cad7c796f130b77b57ac58b6a3a720359c5",
+    "selected_speed_mm_s": 0.375,
+    "speed_selection": "User selected 0.375 mm/s; thesis 0.02 mm/s is retained only as reference information"
+  },
+  "quality": {
+    "bounds_tolerance_mm": 0.01,
+    "volume_drift_fraction": 0.01,
+    "elastic_window": [
+      0.0005,
+      0.0025
+    ],
+    "elastic_min_points": 20,
+    "elastic_min_r2": 0.995,
+    "elastic_slope_change_fraction": 0.1,
+    "kinetic_ratio_p95": 0.05,
+    "artificial_ratio_p95": 0.05,
+    "energy_balance_fraction": 0.02,
+    "force_imbalance_p95": 0.05,
+    "maximum_mass_change_percent": 5,
+    "end_displacement_fraction": 0.001
+  },
+  "runtime": {
+    "minimum_free_gb": 10,
+    "max_stage_minutes": 30,
+    "abaqus": "D:/SIMULIA/Commands/abaqus.bat",
+    "trimatic": "D:/Program Files/Materialise/3-matic 18.0 (x64)/3-matic.exe"
+  },
+  "numerical_calibration": {
+    "status": "USER_SELECTED_DEFAULT",
+    "selected_utc": "2026-10-02T14:28:46Z",
+    "record": "audits/numerical/default_dt3e5_20261002/selection.json",
+    "evidence": "User selected 3e-5 s after complete Primitive comparison and cancelled additional topology tests"
+  }
+}

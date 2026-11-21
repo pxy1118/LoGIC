@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "expected_split_counts": {"train": 304, "validation": 67, "test": 62},
+  "primary_method": "fusion_pod",
+  "methods": ["mean", "density_pod_krr", "pod_krr", "controls_only_pod", "control_stats_pod", "control_pod", "voxel_only_pod", "controls_voxel_pod", "geometry_voxel_pod", "fusion_pod", "fusion_direct"],
+  "seeds": [17, 29, 43, 71, 101],
+  "supplementary_seeds": [17, 29, 43],
+  "supplementary_methods": ["controls_only_pod", "voxel_only_pod", "fusion_pod"],
+  "training": {"epochs": 400, "patience": 60, "batch_size": 12, "learning_rate": 0.001, "weight_decay": 0.001, "rank": 8, "krr_ranks": [8], "early_weight": 0.2, "work_weight": 0.05, "threads": 2, "device": "cuda"},
+  "voxel_size": 80,
+  "resolutions": [40, 80, 120],
+  "resolution_epochs": 200,
+  "learning_sizes": [76, 152, 228, 304],
+  "subset_seed": 20261020,
+  "pod_diagnostic_ranks": [4, 8, 16],
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 20261020,
+  "benchmark": {"warmup": 50, "repetitions": 200, "devices": ["cpu", "cuda"]},
+  "dataset_acceptance": {"accepted_by": "user", "date": "2026-10-20", "policy": "All published complete curves; preserve source quality records without excluding flagged samples."}
+}
