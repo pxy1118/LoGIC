@@ -64,6 +64,7 @@ The CFD batch stages are `1_batch_fluid.py`, `2_batch_cfd.py` and `3_collect_res
 
 ## Citation
 
-Use [CITATION.cff](CITATION.cff) and cite the exact code commit and dataset revision used in your work. The simulation samples, split definitions, model weights and reference predictions for the paper are pinned to one dataset commit. [Dataset snapshot for the paper](https://huggingface.co/datasets/pxy1118/LoGIC-Dataset/tree/97988689ed31266beffc05f4af5b46280bd62795)
+- Cite the archived software using the metadata in [CITATION.cff](CITATION.cff). [Software DOI](https://doi.org/10.5281/zenodo.24410073)
+- Cite the simulation data, splits, trained weights and reference predictions using the companion dataset DOI. [Dataset DOI](https://doi.org/10.57967/hf/11735) · [Dataset snapshot for the paper](https://huggingface.co/datasets/pxy1118/LoGIC-Dataset/tree/97988689ed31266beffc05f4af5b46280bd62795)
 
 Source code uses the accompanying MIT license.
